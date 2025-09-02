@@ -20,15 +20,15 @@ function App() {
     const [chartData, setChartData] = useState<{ xData: number[], yData: number[] } | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [selectedLevel, setSelectedLevel] = useState(1);
+    const [dataset, setDataset] = useState(1);
     const [buyDay, setBuyDay] = useState(0);
     const [sellDay, setSellDay] = useState(0);
 
-    const fetchDataset = async (level: number) => {
+    const fetchDataset = async (dataset: number) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/data/${level}`);
+            const response = await fetch(`http://localhost:8080/api/v1/data/${dataset}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -45,11 +45,11 @@ function App() {
         }
     };
 
-    const fetchProfit = async (level: number) => {
+    const fetchProfit = async (dataset: number) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/data/profit/${level}`);
+            const response = await fetch(`http://localhost:8080/api/v1/data/profit/${dataset}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -65,12 +65,12 @@ function App() {
     };
 
     useEffect(() => {
-        fetchDataset(selectedLevel);
-        fetchProfit(selectedLevel);
-    }, [selectedLevel]);
+        fetchDataset(dataset);
+        fetchProfit(dataset);
+    }, [dataset]);
 
     const handleLevelChange = (level: number) => {
-        setSelectedLevel(level);
+        setDataset(level);
     };
 
     if (loading) {
@@ -87,7 +87,7 @@ function App() {
                 <Typography color="error" variant="h6" gutterBottom>
                     Error: {error}
                 </Typography>
-                <Button variant="contained" onClick={() => fetchDataset(selectedLevel)}>
+                <Button variant="contained" onClick={() => fetchDataset(dataset)}>
                     Retry
                 </Button>
             </Box>
@@ -102,7 +102,7 @@ function App() {
                         {[1, 2, 3, 4].map(level => (
                             <Button
                                 key={level}
-                                variant={selectedLevel === level ? "contained" : "outlined"}
+                                variant={dataset === level ? "contained" : "outlined"}
                                 onClick={() => handleLevelChange(level)}
                             >
                                 Dataset {level}
@@ -119,7 +119,7 @@ function App() {
                                 series={[
                                     {
                                         data: chartData.yData,
-                                        label: `Dataset ${selectedLevel}`
+                                        label: `Dataset ${dataset}`
                                     },
                                 ]}
                                 loading={loading}

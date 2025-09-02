@@ -12,43 +12,43 @@ public class DatasetService {
 
     private final ThreadLocal<Integer> sellDay = ThreadLocal.withInitial(() -> -1);
 
-    public Price getPriceOnDay(int level, int day) {
-        return Application.CACHE.get(level).data().stream()
+    public Price getPriceOnDay(int dataset, int day) {
+        return Application.CACHE.get(dataset).data().stream()
                 .filter(p -> p.day().equals(new Day(day)))
                 .findFirst()
                 .map(ClosingDay::price)
-                .orElseThrow(() -> new IllegalArgumentException("No data found for level %d and day %d".formatted(level, day)));
+                .orElseThrow(() -> new IllegalArgumentException("No data found for dataset %d and day %d".formatted(dataset, day)));
     }
 
-    public int getDays(int level) {
-        return Application.CACHE.get(level)
+    public int getDays(int dataset) {
+        return Application.CACHE.get(dataset)
                 .data()
                 .size();
     }
 
-    public MaxProfit getMaximumProfit(int level) {
-        return new MaxProfit(getBuyDay(level), getSellDay());
+    public MaxProfit getMaximumProfit(int dataset) {
+        return new MaxProfit(getBuyDay(dataset), getSellDay());
     }
 
     /**
-     * Determines the optimal buying day to achieve the maximum profit based on the given level's dataset.
+     * Determines the optimal buying day to achieve the maximum profit based on the given dataset's dataset.
      * <br>
      * The algorithm works as follows:
      * First it builds a map of closing days for each day, then it iterates over the map and tries to find the highest
      * profit for each closing day.
      * <br>
      *
-     * @param level the dataset level used to determine the buying day
+     * @param dataset the dataset used to determine the buying day
      * @return the day index to buy to achieve maximum profit, or -1 if no profitable day is found
      */
-    public int getBuyDay(int level) {
-        int days = getDays(level);
+    public int getBuyDay(int dataset) {
+        int days = getDays(dataset);
         Map<ClosingDay, List<ClosingDay>> closingDays = new HashMap<>();
         for (int day = 0; day < days; day++) {
-            var closingDay = new ClosingDay(new Day(day), getPriceOnDay(level, day));
+            var closingDay = new ClosingDay(new Day(day), getPriceOnDay(dataset, day));
             closingDays.computeIfAbsent(closingDay, k -> new ArrayList<>());
             for (int j = day + 1; j < days; j++) {
-                ClosingDay futureClosingDay = new ClosingDay(new Day(j), getPriceOnDay(level, j));
+                ClosingDay futureClosingDay = new ClosingDay(new Day(j), getPriceOnDay(dataset, j));
                 closingDays.get(closingDay)
                         .add(futureClosingDay);
             }

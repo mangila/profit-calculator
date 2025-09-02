@@ -15,13 +15,13 @@ public class DatasetController {
     }
 
 
-    @GetMapping("{level}")
-    public Dataset getData(@PathVariable int level) {
-        return Application.CACHE.get(level);
+    @GetMapping("{dataset}")
+    public Dataset getData(@PathVariable int dataset) {
+        return Application.CACHE.get(dataset);
     }
 
-    @GetMapping("profit/{level}")
-    public MaxProfit getMaxProfit(@PathVariable int level) {
-        return datasetService.getMaximumProfit(level);
+    @GetMapping("profit/{dataset}")
+    public MaxProfit getMaxProfit(@PathVariable int dataset) {
+        return datasetService.getMaximumProfit(dataset);
     }
 }
