@@ -7,15 +7,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-class DataServiceTest {
+class DatasetServiceTest {
 
     @Autowired
-    private DataService dataService;
+    private DatasetService datasetService;
 
     @Test
     void getData() {
-        MaxProfit maxProfit = dataService.getMaximumProfit(1);
-        assertThat(maxProfit.buyDay()).isEqualTo(0);
-        assertThat(maxProfit.sellDay()).isEqualTo(2);
+        MaxProfit maxProfit = datasetService.getMaximumProfit(1);
+        assertThat(maxProfit.buyDay()).isEqualTo(2);
+        assertThat(maxProfit.sellDay()).isEqualTo(4);
     }
 }

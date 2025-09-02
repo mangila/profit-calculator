@@ -4,7 +4,7 @@ import {Box, Button, CircularProgress, Grid, Typography} from "@mui/material";
 
 interface Pair {
     day: { value: number };
-    price: { price: number };
+    price: { value: number };
 }
 
 interface Dataset {
@@ -12,7 +12,6 @@ interface Dataset {
 }
 
 interface Profit {
-    level: number;
     buyDay: number;
     sellDay: number;
 }
@@ -36,7 +35,7 @@ function App() {
             const data: Dataset = await response.json();
 
             const xData = data.data.map(pair => pair.day.value);
-            const yData = data.data.map(pair => pair.price.price);
+            const yData = data.data.map(pair => pair.price.value);
 
             setChartData({xData, yData});
         } catch (err) {
@@ -123,6 +122,7 @@ function App() {
                                         label: `Dataset ${selectedLevel}`
                                     },
                                 ]}
+                                loading={loading}
                                 height={500}
                                 width={1200}
                                 grid={{vertical: true, horizontal: true}}

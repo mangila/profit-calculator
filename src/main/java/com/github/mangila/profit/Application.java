@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
-    public static final ConcurrentHashMap<Integer, Data> CACHE = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<Integer, Dataset> CACHE = new ConcurrentHashMap<>();
 
     private final ResourceLoader resourceLoader;
 
@@ -37,13 +37,13 @@ public class Application implements CommandLineRunner {
         }
     }
 
-    private Data parseFile(Resource resource) throws IOException {
+    private Dataset parseFile(Resource resource) throws IOException {
         try (var lines = Files.lines(resource.getFile().toPath())) {
-            List<Pair> pairs = lines
+            List<ClosingDay> closingDays = lines
                     .map(s -> s.split(":"))
-                    .map(strings -> new Pair(new Day(Integer.parseInt(strings[0])), new Price(Integer.parseInt(strings[1]))))
+                    .map(strings -> new ClosingDay(new Day(Integer.parseInt(strings[0])), new Price(Integer.parseInt(strings[1]))))
                     .toList();
-            return new Data(pairs);
+            return new Dataset(closingDays);
         }
     }
 }

@@ -6,22 +6,22 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/v1/data")
 @CrossOrigin(origins = "*")
-public class DataController {
+public class DatasetController {
 
-    private final DataService dataService;
+    private final DatasetService datasetService;
 
-    public DataController(DataService dataService) {
-        this.dataService = dataService;
+    public DatasetController(DatasetService datasetService) {
+        this.datasetService = datasetService;
     }
 
 
     @GetMapping("{level}")
-    public Data getData(@PathVariable int level) {
+    public Dataset getData(@PathVariable int level) {
         return Application.CACHE.get(level);
     }
 
     @GetMapping("profit/{level}")
     public MaxProfit getMaxProfit(@PathVariable int level) {
-        return dataService.getMaximumProfit(level);
+        return datasetService.getMaximumProfit(level);
     }
 }
