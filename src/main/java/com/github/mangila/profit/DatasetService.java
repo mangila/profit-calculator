@@ -11,6 +11,7 @@ import java.util.Map;
 public class DatasetService {
 
     private final ThreadLocal<Integer> sellDay = ThreadLocal.withInitial(() -> -1);
+    private final ThreadLocal<Integer> maxProfit = ThreadLocal.withInitial(() -> -1);
 
     public Price getPriceOnDay(int dataset, int day) {
         return Application.CACHE.get(dataset).data().stream()
@@ -27,7 +28,7 @@ public class DatasetService {
     }
 
     public MaxProfit getMaximumProfit(int dataset) {
-        return new MaxProfit(getBuyDay(dataset), getSellDay());
+        return new MaxProfit(getBuyDay(dataset), getSellDay(), getMaxProfit());
     }
 
     /**
@@ -65,6 +66,7 @@ public class DatasetService {
                     maximumProfit = profit;
                     buyDay = currentDay.day().value();
                     sellDay.set(closingDay.day().value());
+                    maxProfit.set(maximumProfit);
                 }
             }
         }
@@ -87,5 +89,12 @@ public class DatasetService {
             throw new IllegalStateException("No sell day found");
         }
         return sellDay.get();
+    }
+
+    private int getMaxProfit() {
+        if (maxProfit.get() == -1) {
+            throw new IllegalStateException("No profit found");
+        }
+        return maxProfit.get();
     }
 }

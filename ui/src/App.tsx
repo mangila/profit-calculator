@@ -14,6 +14,7 @@ interface Dataset {
 interface Profit {
     buyDay: number;
     sellDay: number;
+    profit: number;
 }
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
     const [dataset, setDataset] = useState(1);
     const [buyDay, setBuyDay] = useState(0);
     const [sellDay, setSellDay] = useState(0);
+    const [profit, setProfit] = useState(0);
 
     const fetchDataset = async (dataset: number) => {
         setLoading(true);
@@ -57,6 +59,7 @@ function App() {
 
             setBuyDay(data.buyDay);
             setSellDay(data.sellDay);
+            setProfit(data.profit);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred');
         } finally {
@@ -69,7 +72,7 @@ function App() {
         fetchProfit(dataset);
     }, [dataset]);
 
-    const handleLevelChange = (level: number) => {
+    const handleDatasetChange = (level: number) => {
         setDataset(level);
     };
 
@@ -98,14 +101,14 @@ function App() {
         <>
             <Grid container direction="column" spacing={2}>
                 <Grid size={12}>
-                    <Box display="flex" justifyContent="center" gap={2} mb={2}>
-                        {[1, 2, 3, 4].map(level => (
+                    <Box display="flex" justifyContent="center" gap={4} mt={1}>
+                        {[1, 2, 3, 4].map(dataset => (
                             <Button
-                                key={level}
-                                variant={dataset === level ? "contained" : "outlined"}
-                                onClick={() => handleLevelChange(level)}
+                                key={dataset}
+                                variant={dataset === dataset ? "contained" : "outlined"}
+                                onClick={() => handleDatasetChange(dataset)}
                             >
-                                Dataset {level}
+                                Dataset {dataset}
                             </Button>
                         ))}
                     </Box>
@@ -130,12 +133,19 @@ function App() {
                         )}
                     </Box>
                 </Grid>
-                <Grid display="flex" justifyContent="center" alignItems="center" spacing={10} container>
+                <Grid display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      spacing={10}
+                      container>
                     <Grid>
-                        Buy: {buyDay}
+                        Buy Day: {buyDay}
                     </Grid>
                     <Grid>
-                        Sell: {sellDay}
+                        Sell Day: {sellDay}
+                    </Grid>
+                    <Grid>
+                        Profit: {profit}
                     </Grid>
                 </Grid>
             </Grid>
