@@ -7,3 +7,6 @@ Calculate maximum profit for a given dataset and displays the optimal buy and se
 start with day 0 and increase by 1 every day together with a closing price.
 
 * See in src/main/resources/data/ for structure
+
+
+![screenshot](screenshot.png)
